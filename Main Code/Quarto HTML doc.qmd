@@ -1,0 +1,290 @@
+---
+title: "Language Analysis"
+format: html
+editor: visual
+---
+
+## Quarto
+
+This analysis looks at language usage on the internet over time and across regions within Ukraine. Google Trends data using the gtrendsR package is primarily used. The gtrendsR limits the amount of queries you can conduct and I have not been able to go over the cap.
+
+This analysis somewhat relies on revealed preference theory in assuming that the language people use on the internet is the one that *really* prefer to use, but not actually express in public or other setting. This is partly inspired by the book by Seth Stephens-Davidowitz [Everybody Lies](https://sethsd.com/everybodylies) who found people expressed things online that they likely wouldn't openly express. Still, there are clear limitations with revealed preference theory in the context of internet usage in Ukraine. A clear limitation, especially going back further in time, is that there was a genuine dearth of Ukrainian language resources for many things. Even to this day it's possible that primarily Ukrainian speakers could search in Russian for certain things where there are few Ukrainian language sources.
+
+Below are intial queries of different words over time that are spelled differently in Russian v Ukrainian over time with ticks for key events and a trend line.
+
+```{r setup, include=FALSE}
+#| echo: false
+library(gtrendsR)
+library(reshape2)
+library(dplyr)
+library(stargazer)
+library(tidyr)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(lattice)
+library(scales)
+library(patchwork)
+library(sf)
+library(dplyr)
+library(tmap)
+library(gt)
+
+Sys.setlocale("LC_CTYPE", "ukrainian")
+
+process_g_trends <-  function(dat){    
+  
+  # Process time-level data
+  t <- dat[[1]]
+  t$hits <- ifelse(t$hits == "<1", 0.5, t$hits)
+  t$hits <- as.numeric(ifelse(t$hits == "", 0, t$hits))
+  
+  # Region-level
+  r <- dat[[3]]
+  r$hits <- ifelse(r$hits == "<1", 0.5, r$hits)
+  r$hits <- as.numeric(ifelse(r$hits == "", 0, r$hits))
+  
+  # City-level
+  c <- dat[[5]]
+  c$hits <- ifelse(c$hits == "<1", 0.5, c$hits)
+  c$hits <- as.numeric(ifelse(c$hits == "", 0, c$hits))
+  
+  # Assign output to global environment with original variable names
+  # assign(deparse(substitute(data)), dat, envir = .GlobalEnv)
+  # assign(deparse(substitute(time)), t, envir = .GlobalEnv)
+  # assign(deparse(substitute(region)), r, envir = .GlobalEnv)
+  # assign(deparse(substitute(city)), c, envir = .GlobalEnv)
+  
+  #Assign to list alternative
+  return(list(time = t, region = r, city = c))
+  
+}
+
+#If needed function to make data wide and reassigning variable names, creating ratio . Make sure Ukrainian first search term
+wide_dat <- function(datz){
+ 
+#To preserve column order
+  cols <- c(colnames(datz)[!(colnames(datz) %in% c("keyword","hits"))], unique(datz$keyword))
+  ra <- spread(datz,keyword, hits)
+  
+# Select the columns in the order they are listed in the cols vector
+ra <- ra[,cols]
+ n <- ncol(ra)
+ names(ra)[(n-1):n] <- c("hits_ua","hits_ru")
+ ra$ratio <- ra$hits_ua / ra$hits_ru
+ 
+ return(ra)
+}
+
+time_plot <- function(dat,title) {
+  
+  events <- data.frame(
+    date = as.POSIXct(c("2010-02-17","2014-02-01", "2019-04-21", "2022-02-24")),
+    label = c("Yanukovych Elected","Maidan", "Zelenskyy Elected", "Full-Scale Invasion")
+  )
+  
+  # Create plot
+  ggplot(dat, aes(x = date, y = ratio)) +
+    geom_line(color = "#1f78b4", size = 1) +
+    geom_vline(data = events, aes(xintercept = date), linetype = "dashed", color = "gray50") +
+    geom_text(
+      data = events,
+      aes(x = date, y = max(dat$ratio, na.rm = TRUE) * 0.75, label = label),
+      angle = 90, vjust = -0.5, hjust = 0, size = 3.2, color = "gray30"
+    ) +
+    labs(
+      title = title,
+      x = "Date",
+      y = "Ukrainian : Russian Search Ratio"
+    ) +
+    scale_x_datetime(date_labels = "%Y", date_breaks = "2 years") +
+    theme_minimal(base_size = 13) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      axis.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank()
+    ) +
+  geom_smooth(method = "loess", se = TRUE,color="red4")
+}
+```
+
+```{r}
+how <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS"))[[1]]), "How: Як/как")
+News <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/news2010_01_01_2025_05_01.rds"))[[1]]), "News: новини/новости")
+what <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/what2010_01_01_2025_05_01.rds"))[[1]]), "What is: Що таке/Что такое")
+price <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Price: Ціна/Цена")
+games <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/games2010_01_01_2025_05_01.RDS"))[[1]]), "Games: Ігри/Игри")
+recipes <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Recipes: Рецепти/Рецепты")
+price
+News
+
+#Plot over date
+(how ) / (what) +
+  plot_annotation(title = "Graphs of Ukrainian/Russian Ratios over Time")
+
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS"))[[1]]), "How: Як/как")
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/news2010_01_01_2025_05_01.rds"))[[1]]), "News: новини/новости")
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/what2010_01_01_2025_05_01.rds"))[[1]]), "What is: Що таке/Что такое")
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Price: Ціна/Цена")
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/games2010_01_01_2025_05_01.RDS"))[[1]]), "Games: Ігри/Игри")
+# time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Recipes: Рецепти/Рецепты")
+
+
+
+
+```
+
+Below looks at within Oblasts/Cities the ratio for searches that were between 2010 and May 1 2025. Table by ratio
+
+```{r}
+how_region <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS")[[3]]
+
+#Table Ranking By Region
+reg_ru <- how_region  %>%
+  filter(keyword=="Как") %>%
+  arrange(location) %>% select(hits) 
+
+reg_ua <- how_region  %>%
+  filter(keyword=="Як") %>%
+  arrange(location) %>% select(location,hits) 
+
+#Creating separte columns for two diff search terms
+reg_ua <- rename(reg_ua,hits_ua=hits)
+reg_ru <- rename(reg_ru,hits_ru=hits)
+regions_tab <- cbind(reg_ua,reg_ru)
+#Setting Russian to numeric and sorting by it. Could be better to look at rus realtive to ukr as ratio?
+regions_tab$hits_ua <-  ifelse(regions_tab$hits_ua == "<1",0,regions_tab$hits_ua)
+regions_tab$hits_ua <-  as.numeric(ifelse(regions_tab$hits_ua == "",0,regions_tab$hits_ua))
+regions_tab$hits_ru <- as.numeric(regions_tab$hits_ru)
+
+regions_tab$rat <- regions_tab$hits_ua / regions_tab$hits_ru
+
+regions_tab <-  arrange(regions_tab, -regions_tab$rat)
+names(regions_tab) <- c("Oblast", "Hits UA", "Hits RU", "Ratio UA/RU")
+# stargazer(regions_tab,summary=FALSE,
+#           title= "Ukrainian Oblasts and Cities Ranked by Ukrainian/Russian Ratio", notes = "Crimea and Sevastapol had insignificant Ukrainian results",header =FALSE)
+
+regions_tab %>%
+  gt() %>%
+  tab_header(
+    title = "Ukrainian Oblasts and Cities Ranked by Ukrainian-to-Russian Search Ratio",
+    subtitle = "Search term: 'how' ('Як' vs 'Как') from Google Trends"
+  ) %>%
+  fmt_number(columns = c(`Hits UA`, `Hits RU`, `Ratio UA/RU`), decimals = 2) %>%
+  tab_footnote(
+    footnote = "Crimea and Sevastopol may have suppressed or missing data.",
+    locations = cells_title(groups = "title")
+  ) %>%
+  cols_label(
+    `Hits UA` = "Hits (UA)",
+    `Hits RU` = "Hits (RU)",
+    `Ratio UA/RU` = "UA/RU Ratio"
+  ) %>%
+  opt_table_outline()
+```
+
+```{r}
+how_region <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS")[[3]]
+
+#Table Ranking By Region
+reg_ru <- how_region  %>%
+  filter(keyword=="Как") %>%
+  arrange(location) %>% select(hits) 
+
+reg_ua <- how_region  %>%
+  filter(keyword=="Як") %>%
+  arrange(location) %>% select(location,hits) 
+
+#Creating separte columns for two diff search terms
+reg_ua <- rename(reg_ua,hits_ua=hits)
+reg_ru <- rename(reg_ru,hits_ru=hits)
+regions_tab <- cbind(reg_ua,reg_ru)
+#Setting Russian to numeric and sorting by it. Could be better to look at rus realtive to ukr as ratio?
+regions_tab$hits_ua <-  ifelse(regions_tab$hits_ua == "<1",0,regions_tab$hits_ua)
+regions_tab$hits_ua <-  as.numeric(ifelse(regions_tab$hits_ua == "",0,regions_tab$hits_ua))
+regions_tab$hits_ru <- as.numeric(regions_tab$hits_ru)
+
+regions_tab$rat <- regions_tab$hits_ua / regions_tab$hits_ru
+
+regions_tab <-  arrange(regions_tab, -regions_tab$rat)
+names(regions_tab) <- c("Oblast", "Hits UA", "Hits RU", "Ratio UA/RU")
+# stargazer(regions_tab,summary=FALSE,
+#           title= "Ukrainian Oblasts and Cities Ranked by Ukrainian/Russian Ratio", notes = "Crimea and Sevastapol had insignificant Ukrainian results",header =FALSE)
+
+regions_tab %>%
+  gt() %>%
+  tab_header(
+    title = "Ukrainian Oblasts and Cities Ranked by Ukrainian-to-Russian Search Ratio",
+    subtitle = "Search term: 'how' ('Як' vs 'Как') from Google Trends"
+  ) %>%
+  fmt_number(columns = c(`Hits UA`, `Hits RU`, `Ratio UA/RU`), decimals = 2) %>%
+  tab_footnote(
+    footnote = "Crimea and Sevastopol may have suppressed or missing data.",
+    locations = cells_title(groups = "title")
+  ) %>%
+  cols_label(
+    `Hits UA` = "Hits (UA)",
+    `Hits RU` = "Hits (RU)",
+    `Ratio UA/RU` = "UA/RU Ratio"
+  ) %>%
+  opt_table_outline()
+```
+
+```{r}
+
+how_region <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS")[[3]]
+
+#Table Ranking By Region
+reg_ru <- how_region  %>%
+  filter(keyword=="Как") %>%
+  arrange(location) %>% select(hits) 
+
+reg_ua <- how_region  %>%
+  filter(keyword=="Як") %>%
+  arrange(location) %>% select(location,hits) 
+
+#Creating separte columns for two diff search terms
+reg_ua <- rename(reg_ua,hits_ua=hits)
+reg_ru <- rename(reg_ru,hits_ru=hits)
+
+regions_tab <- cbind(reg_ua,reg_ru)
+regions_tab$hits_ua <-  ifelse(regions_tab$hits_ua == "<1",0,regions_tab$hits_ua)
+regions_tab$hits_ua <-  as.numeric(ifelse(regions_tab$hits_ua == "",0,regions_tab$hits_ua))
+regions_tab$hits_ru <- as.numeric(regions_tab$hits_ru)
+regions_tab$rat <- regions_tab$hits_ua / regions_tab$hits_ru
+ukraine_sf <- st_read("C:/UKR-RU-Language-Analysis/Shapefiles/gadm41_UKR_1.shp")
+
+#standardize names
+nam <- read.csv("C:/UKR-RU-Language-Analysis/Shapefiles/name_lookup.csv")
+
+#Make sure names match
+regions_tab <-cbind(regions_tab,shapefile_name= nam$shapefile_name)
+
+map_data <- ukraine_sf %>%
+  left_join(regions_tab, by = c("NAME_1" = "shapefile_name"))
+
+#Kiev city fails join for some reason. Manually correcting and renmaing
+map_data$rat[13] <- regions_tab$rat[12]
+map_data$NAME_1[13] <- "Kyiv City"
+
+breaks <- c(0, .1,.25, 0.5, 1, 2,4,10, Inf)
+labels <- c("<0.25", "0.25–0.5", "0.5–1", "1–2", ">2")
+
+tmap_mode("plot")
+tm_shape(map_data) +
+  tm_polygons("rat", palette = "RdYlGn", style = "fixed",
+              breaks = breaks,
+              palette = "RdYlGn",
+              title = "UA/RU Language Ratio",orientation = "landscape") +
+  tm_layout(title = "Ukrainian-to-Russian Search Ratio by Oblast",
+            legend.outside = TRUE)
+
+tmap_mode("view")  # Enables interactive mode
+tm_shape(map_data) +
+  tm_polygons("rat", palette = "RdYlGn", style = "fixed",
+              breaks = breaks,
+              title = "UA/RU Language Ratio", 
+              popup.vars = c("Oblast" = "NAME_1", "Ratio" = "rat")) +
+  tm_layout(title = "Interactive Ukrainian-to-Russian Search Ratio Map")
+```
+The `echo: false` option disables the printing of code (only output is displayed).
