@@ -13,7 +13,7 @@ reg_ua <- how_region  %>%
   filter(keyword=="Як") %>%
   arrange(location) %>% select(location,hits) 
 
-#Creating separte columns for two diff search terms
+#Creating separate columns for two diff search terms
 reg_ua <- rename(reg_ua,hits_ua=hits)
 reg_ru <- rename(reg_ru,hits_ru=hits)
 regions_tab <- cbind(reg_ua,reg_ru)
