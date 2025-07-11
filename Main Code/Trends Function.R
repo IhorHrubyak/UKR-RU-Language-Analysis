@@ -119,6 +119,8 @@ time_plot <- function(dat,title) {
   geom_smooth(method = "loess", se = TRUE,color="red4")
 }
 
+
+
 #To get data for each of regions
 #unique geo codes
 # geo.codes = sort(unique(countries[substr(countries$sub_code, 1, 2) == "UA", ]$sub_code))
@@ -148,7 +150,7 @@ time_plot <- function(dat,title) {
 #From each region with retries again not clear if retries help
 trends_by_regions <- function(keywords_ukrainian, keywords_russian, 
                               date , gprop = "web", 
-                              retry_count = 100, retry_delay = 300) {
+                              retry_count = 1, retry_delay = 30) {
   
   # Get unique Ukrainian region codes
   geo_codes <- sort(unique(countries[substr(countries$sub_code, 1, 2) == "UA", ]$sub_code))
@@ -194,7 +196,7 @@ trends_by_regions <- function(keywords_ukrainian, keywords_russian,
       # Save individual region result
       time_label <- gsub("[^0-9a-zA-Z]+", "_", date)
       file_name <- paste0("trends_", geo_codes[i], "_", time_label, ".RDS")
-      saveRDS(region_data, file = file.path("C:/Language Analysis/Trend Queries", file_name))
+      saveRDS(region_data, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries/Region", file_name))
       
       # Add a small delay between regions to avoid hitting rate limits
       if (i < length(geo_codes)) Sys.sleep(5)
@@ -202,7 +204,7 @@ trends_by_regions <- function(keywords_ukrainian, keywords_russian,
   }
   
 # Save complete results
-saveRDS(results, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries", 
+saveRDS(results, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries/Region", 
                                     paste0("trends_all_regions_", gsub("[^0-9a-zA-Z]+", "_", date), ".RDS")))
   
   return(results)
@@ -210,11 +212,11 @@ saveRDS(results, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries",
 
 #Example Usage
 # date <- "2010-01-01 2025-05-01"
-# reg_result <- trends_by_regions(
-#   keywords_ukrainian = "що таке+новини+ігри+рецепти+Як+ціна+чому+гроші",
-#   keywords_russian = "что такое+Как+новости+игры+рецепты+цена+почему+деньги",date
+# trends_by_regions(
+#   keywords_ukrainian = "що+новини+ігри+рецепти+Як+ціна+чому+гроші",
+#   keywords_russian = "что+Как+новости+игры+рецепты+цена+почему+деньги",date
 # )
-# 
+
 # trends_dat(composite,"composite","що таке+новини+ігри+рецепти+Як+ціна+чому+гроші","что такое+Как+новости+игры+рецепты+цена+почему+деньги","UA",
 #             date,time,region,city)
 
