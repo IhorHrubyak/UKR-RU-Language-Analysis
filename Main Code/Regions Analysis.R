@@ -28,3 +28,5 @@ plots <- map(regions_processed, ~time_plot(wide_dat(.x), head(.x$name, 1)))
 do.call(gridExtra::grid.arrange, c(plots[1:4], ncol = 2))
 do.call(gridExtra::grid.arrange, c(plots[1:6], ncol = 3))
 do.call(gridExtra::grid.arrange, c(plots[1:9], ncol = 3))
+
+

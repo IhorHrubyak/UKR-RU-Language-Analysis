@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Ihor Campagna">
+
+<title>Ukrainian vs Russian Language Use in Ukraine</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Analysis_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Analysis_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Analysis_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ukrainian vs Russian Language Use in Ukraine</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Ihor Campagna </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    This project examines changes in the relative usage of Ukrainian vs.&nbsp;Russian language in Ukraine using Google Trends and regional data. It explores national and oblast-level trends, with historical context for key events such as the Euromaidan Revolution and the 2022 invasion.
+  </div>
+</div>
+
+
+</header>
+
+
+<section id="i-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="i-introduction">I Introduction</h2>
+<p>Language has long shaped Ukrainian national identity and its internal political struggles. Ukrainian was historically repressed under foreign rule, while Russian dominated cities and public life, often seen as a language of prestige and progress. After independence in 1991, overt suppression of Ukrainian ended — but the status of Russian remained deeply contested.</p>
+<p>In the 2001 census, 67.5% of Ukrainians identified Ukrainian as their native language, and 29.6% named Russian. But “native language” often reflected identity more than use. Most Ukrainians are bilingual and move between languages &nbsp;Ukrainian, Russian, or a hybrid known as <em>Surzhyk</em>. Understanding everyday language use is difficult. Traditional surveys capture what people claim they speak &nbsp;not how they act.</p>
+<p>This project uses <strong>Google Trends</strong> to track the relative usage of Ukrainian and Russian across time and region. By comparing the search frequencies of common queries in both languages I examine patterns in digital behavior as a proxy for language preference in daily life.</p>
+<p>The goal is to understand whether Ukrainians are shifting their linguistic habits online especially in response to key political events such as the 2013–2014 Maidan Revolution and the 2022 Russian invasion. If search behavior reflects cultural or identity shifts, this approach may offer a window into Ukraine’s evolving national consciousness.</p>
+</section>
+<section id="ii-data-and-methodology" class="level2">
+<h2 class="anchored" data-anchor-id="ii-data-and-methodology"><strong>II Data and Methodology</strong></h2>
+<p>This project uses data from <strong>Google Trends</strong>, accessed via the gtrendsR package in <strong>R</strong>, to estimate language usage in Ukraine. I compare the relative search interest of equivalent queries spelled differently in &nbsp;<strong>Ukrainian</strong> and <strong>Russian</strong> that over time and across regions.</p>
+<p>Google Trends provides normalized search scores (0–100). I compute a <strong>Ukrainian-to-Russian ratio</strong> to capture relative language preference:</p>
+<p><strong>Ratio = Ukrainian score / Russian score</strong></p>
+<p>Data was collected:</p>
+<ul>
+<li><p><strong>Nationally</strong> from 2010 to 2025 (weekly).</p></li>
+<li><p><strong>Regionally</strong> using Ukrainian ISO subregion codes (e.g., UA-30 for Kyiv).</p></li>
+</ul>
+<p><strong>Limitations</strong></p>
+<ul>
+<li><p><strong>Relative scores</strong>: Google Trends data is scaled within queries and not comparable across unrelated searches.</p></li>
+<li><p><strong>Opacity</strong>: Sampling methods and geographic boundaries are not publicly disclosed.</p></li>
+<li><p><strong>User behavior bias</strong>: Search language reflects usage, not identity or fluency.</p></li>
+<li><p><strong>Content availability bias</strong>: Historically, more content was available in Russian. This may <strong>overstate Russian usage</strong>, especially in earlier years or content-heavy queries.</p></li>
+<li><p><strong>Digital divide</strong>: Results reflect internet users, possibly underrepresenting rural or older populations.</p></li>
+</ul>
+</section>
+<section id="iii-national-level-trends" class="level2">
+<h2 class="anchored" data-anchor-id="iii-national-level-trends"><strong>III National Level Trends</strong></h2>
+<p>Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there seems to be clear upward trend that seems to spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it’s still not even above 1.</p>
+<p><strong>Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Below displays a composite index of search terms that includes the terms: what, news, games, recipes, how, price, why and money that are all spelled differently in the two languages showing a bit of a smoother trend with a sharp increase seeming to begin around the full scale invasion.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>EXPAND ON BELOW MORE</p>
+<p>The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R’s breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints afterMay 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.</p>
+</section>
+<section id="iv-regional-trends" class="level2">
+<h2 class="anchored" data-anchor-id="iv-regional-trends"><strong>IV Regional Trends</strong></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="ctftvirowp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ctftvirowp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ctftvirowp thead, #ctftvirowp tbody, #ctftvirowp tfoot, #ctftvirowp tr, #ctftvirowp td, #ctftvirowp th {
+  border-style: none;
+}
+
+#ctftvirowp p {
+  margin: 0;
+  padding: 0;
+}
+
+#ctftvirowp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D3D3D3;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ctftvirowp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ctftvirowp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ctftvirowp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ctftvirowp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ctftvirowp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ctftvirowp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ctftvirowp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ctftvirowp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ctftvirowp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ctftvirowp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ctftvirowp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ctftvirowp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ctftvirowp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ctftvirowp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ctftvirowp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ctftvirowp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ctftvirowp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ctftvirowp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ctftvirowp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ctftvirowp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ctftvirowp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ctftvirowp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ctftvirowp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ctftvirowp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ctftvirowp .gt_left {
+  text-align: left;
+}
+
+#ctftvirowp .gt_center {
+  text-align: center;
+}
+
+#ctftvirowp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ctftvirowp .gt_font_normal {
+  font-weight: normal;
+}
+
+#ctftvirowp .gt_font_bold {
+  font-weight: bold;
+}
+
+#ctftvirowp .gt_font_italic {
+  font-style: italic;
+}
+
+#ctftvirowp .gt_super {
+  font-size: 65%;
+}
+
+#ctftvirowp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ctftvirowp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ctftvirowp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ctftvirowp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ctftvirowp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ctftvirowp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ctftvirowp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ctftvirowp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ctftvirowp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="4" class="gt_heading gt_title gt_font_normal">Ukrainian Oblasts and Cities Ranked by Ukrainian-to-Russian Search Ratio<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Composite Ukrainian v Russian Search Terms from Google Trends</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Oblast" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Oblast</th>
+<th id="Hits-UA" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Hits (UA)</th>
+<th id="Hits-RU" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Hits (RU)</th>
+<th id="Ratio-UA/RU" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">UA/RU Ratio</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Ternopil's'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">100.00</td>
+<td class="gt_row gt_right" headers="Hits RU">20.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">5.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Ivano-Frankivs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">93.00</td>
+<td class="gt_row gt_right" headers="Hits RU">19.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">4.89</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Volyns'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">97.00</td>
+<td class="gt_row gt_right" headers="Hits RU">23.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">4.22</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Lviv Oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">84.00</td>
+<td class="gt_row gt_right" headers="Hits RU">25.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">3.36</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Rivnens'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">94.00</td>
+<td class="gt_row gt_right" headers="Hits RU">31.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">3.03</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Khmel'nyts'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">71.00</td>
+<td class="gt_row gt_right" headers="Hits RU">38.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.87</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Zakarpats'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">65.00</td>
+<td class="gt_row gt_right" headers="Hits RU">38.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.71</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Chernivets'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">63.00</td>
+<td class="gt_row gt_right" headers="Hits RU">41.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.54</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Vinnyts'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">61.00</td>
+<td class="gt_row gt_right" headers="Hits RU">42.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.45</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Zhytomyrs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">55.00</td>
+<td class="gt_row gt_right" headers="Hits RU">51.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.08</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Cherkas'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">54.00</td>
+<td class="gt_row gt_right" headers="Hits RU">52.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">1.04</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Kyivs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">44.00</td>
+<td class="gt_row gt_right" headers="Hits RU">55.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.80</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Poltavs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">41.00</td>
+<td class="gt_row gt_right" headers="Hits RU">61.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.67</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Chernihivs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">37.00</td>
+<td class="gt_row gt_right" headers="Hits RU">65.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.57</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Kirovohrads'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">36.00</td>
+<td class="gt_row gt_right" headers="Hits RU">66.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.55</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Sums'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">32.00</td>
+<td class="gt_row gt_right" headers="Hits RU">67.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.48</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Kyiv city</td>
+<td class="gt_row gt_right" headers="Hits UA">27.00</td>
+<td class="gt_row gt_right" headers="Hits RU">57.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.47</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Mykolaivs'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">22.00</td>
+<td class="gt_row gt_right" headers="Hits RU">83.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.27</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Dnipropetrovsk Oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">18.00</td>
+<td class="gt_row gt_right" headers="Hits RU">78.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.23</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Khersons'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">16.00</td>
+<td class="gt_row gt_right" headers="Hits RU">88.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.18</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Odessa Oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">13.00</td>
+<td class="gt_row gt_right" headers="Hits RU">82.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.16</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Zaporiz'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">13.00</td>
+<td class="gt_row gt_right" headers="Hits RU">83.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.16</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Kharkiv Oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">12.00</td>
+<td class="gt_row gt_right" headers="Hits RU">81.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.15</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Donetsk Oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">6.00</td>
+<td class="gt_row gt_right" headers="Hits RU">99.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.06</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Luhans'ka oblast</td>
+<td class="gt_row gt_right" headers="Hits UA">4.00</td>
+<td class="gt_row gt_right" headers="Hits RU">99.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.04</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Oblast">Crimea</td>
+<td class="gt_row gt_right" headers="Hits UA">0.00</td>
+<td class="gt_row gt_right" headers="Hits RU">100.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Oblast">Sevastopol' city</td>
+<td class="gt_row gt_right" headers="Hits UA">0.00</td>
+<td class="gt_row gt_right" headers="Hits RU">95.00</td>
+<td class="gt_row gt_right" headers="Ratio UA/RU">0.00</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Crimea and Sevastopol may have suppressed or missing data.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

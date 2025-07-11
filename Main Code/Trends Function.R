@@ -107,7 +107,7 @@ time_plot <- function(dat,title) {
     labs(
       title = title,
       x = "Date",
-      y = "Ukrainian : Russian Search Ratio"
+      y = "UKR/RUS Search Ratio"
     ) +
     scale_x_datetime(date_labels = "%Y", date_breaks = "2 years") +
     theme_minimal(base_size = 13) +
@@ -116,7 +116,7 @@ time_plot <- function(dat,title) {
       axis.title = element_text(face = "bold"),
       panel.grid.minor = element_blank()
     ) +
-  geom_smooth(method = "loess", se = TRUE,color="red4")
+  geom_smooth(formula = y ~ x, method = "loess", se = TRUE,color="red4")
 }
 
 

@@ -1,0 +1,147 @@
+---
+title: "Ukrainian vs Russian Language Use in Ukraine"
+author: "John Ihor Campagna"
+format: html
+editor: visual
+abstract: This project examines changes in the relative usage of Ukrainian vs. Russian language in Ukraine using Google Trends and regional data. It explores national and oblast-level trends, with historical context for key events such as the Euromaidan Revolution and the 2022 invasion.
+---
+
+## I Introduction
+
+Language has long shaped Ukrainian national identity and its internal political struggles. Ukrainian was historically repressed under foreign rule, while Russian dominated cities and public life, often seen as a language of prestige and progress. After independence in 1991, overt suppression of Ukrainian ended — but the status of Russian remained deeply contested.
+
+In the 2001 census, 67.5% of Ukrainians identified Ukrainian as their native language, and 29.6% named Russian. But “native language” often reflected identity more than use. Most Ukrainians are bilingual and move between languages  Ukrainian, Russian, or a hybrid known as *Surzhyk*. Understanding everyday language use is difficult. Traditional surveys capture what people claim they speak  not how they act.
+
+This project uses **Google Trends** to track the relative usage of Ukrainian and Russian across time and region. By comparing the search frequencies of common queries in both languages I examine patterns in digital behavior as a proxy for language preference in daily life.
+
+The goal is to understand whether Ukrainians are shifting their linguistic habits online especially in response to key political events such as the 2013–2014 Maidan Revolution and the 2022 Russian invasion. If search behavior reflects cultural or identity shifts, this approach may offer a window into Ukraine’s evolving national consciousness.
+
+## **II Data and Methodology**
+
+This project uses data from **Google Trends**, accessed via the gtrendsR package in **R**, to estimate language usage in Ukraine. I compare the relative search interest of equivalent queries spelled differently in  **Ukrainian** and **Russian** that over time and across regions.
+
+Google Trends provides normalized search scores (0–100). I compute a **Ukrainian-to-Russian ratio** to capture relative language preference:
+
+**Ratio = Ukrainian score / Russian score**
+
+Data was collected:
+
+-   **Nationally** from 2010 to 2025 (weekly).
+
+-   **Regionally** using Ukrainian ISO subregion codes (e.g., UA-30 for Kyiv).
+
+**Limitations**
+
+-   **Relative scores**: Google Trends data is scaled within queries and not comparable across unrelated searches.
+
+-   **Opacity**: Sampling methods and geographic boundaries are not publicly disclosed.
+
+-   **User behavior bias**: Search language reflects usage, not identity or fluency.
+
+-   **Content availability bias**: Historically, more content was available in Russian. This may **overstate Russian usage**, especially in earlier years or content-heavy queries.
+
+-   **Digital divide**: Results reflect internet users, possibly underrepresenting rural or older populations.
+
+## **III National Level Trends**
+
+```{r}
+#| include: false
+library(gtrendsR)
+library(reshape2)
+library(dplyr)
+library(stargazer)
+library(tidyr)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(lattice)
+library(scales)
+library(patchwork)
+library(sf)
+library(dplyr)
+library(tmap)
+library(gt)
+
+source("Main Code/Trends Function.R")
+how <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS"))[[1]]), "How: Як/как")
+News <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/news2010_01_01_2025_05_01.rds"))[[1]]), "News: новини/новости")
+what <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/what2010_01_01_2025_05_01.rds"))[[1]]), "What is: Що таке/Что такое")
+price <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Price: Ціна/Цена")
+games <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/games2010_01_01_2025_05_01.RDS"))[[1]]), "Games: Ігри/Игри")
+recipes <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Recipes: Рецепти/Рецепты")
+money <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/money2010_01_01_2025_05_01.RDS"))[[1]]), "Money: гроші/деньги")
+when <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/when2010_01_01_2025_05_01.RDS"))[[1]]), "When: Коли/Когда")
+composite <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite2010_01_01_2025_05_01.RDS"))[[1]]), "Composite")
+
+```
+
+Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there seems to be clear upward trend that seems to spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it's still not even above 1.
+
+**Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap**
+
+```{r echo=FALSE}
+when
+how
+News
+money
+
+```
+
+Below displays a composite index of search terms that includes the terms: what, news, games, recipes, how, price, why and money that are all spelled differently in the two languages showing a bit of a smoother trend with a sharp increase seeming to begin around the full scale invasion.
+
+```{r echo=FALSE}
+composite
+```
+
+EXPAND ON BELOW MORE
+
+The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R's breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints afterMay 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.
+
+## **IV Regional Trends**
+
+```{r echo=FALSE}
+composite <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite2010_01_01_2025_05_01.RDS")[[3]]
+
+#Table Ranking By Region
+reg_ru <- composite  %>%
+  filter(keyword=="что + Как + новости + игры + рецепты + цена + почему + деньги") %>%
+  arrange(location) %>% select(hits) 
+
+reg_ua <- composite  %>%
+  filter(keyword=="що + новини + ігри + рецепти + Як + ціна + чому + гроші") %>%
+  arrange(location) %>% select(location,hits) 
+
+#Creating separte columns for two diff search terms
+reg_ua <- rename(reg_ua,hits_ua=hits)
+reg_ru <- rename(reg_ru,hits_ru=hits)
+regions_tab <- cbind(reg_ua,reg_ru)
+#Setting Russian to numeric and sorting by it. Could be better to look at rus realtive to ukr as ratio?
+regions_tab$hits_ua <-  ifelse(regions_tab$hits_ua == "<1",0,regions_tab$hits_ua)
+regions_tab$hits_ua <-  as.numeric(ifelse(regions_tab$hits_ua == "",0,regions_tab$hits_ua))
+regions_tab$hits_ru <- as.numeric(regions_tab$hits_ru)
+
+regions_tab$rat <- regions_tab$hits_ua / regions_tab$hits_ru
+
+regions_tab <-  arrange(regions_tab, -regions_tab$rat)
+names(regions_tab) <- c("Oblast", "Hits UA", "Hits RU", "Ratio UA/RU")
+# stargazer(regions_tab,summary=FALSE,
+#           title= "Ukrainian Oblasts and Cities Ranked by Ukrainian/Russian Ratio", notes = "Crimea and Sevastapol had insignificant Ukrainian results",header =FALSE)
+
+regions_tab %>%
+  gt() %>%
+  tab_header(
+    title = "Ukrainian Oblasts and Cities Ranked by Ukrainian-to-Russian Search Ratio",
+    subtitle = "Composite Ukrainian v Russian Search Terms from Google Trends"
+  ) %>%
+  fmt_number(columns = c(`Hits UA`, `Hits RU`, `Ratio UA/RU`), decimals = 2) %>%
+  tab_footnote(
+    footnote = "Crimea and Sevastopol may have suppressed or missing data.",
+    locations = cells_title(groups = "title")
+  ) %>%
+  cols_label(
+    `Hits UA` = "Hits (UA)",
+    `Hits RU` = "Hits (RU)",
+    `Ratio UA/RU` = "UA/RU Ratio"
+  ) %>%
+  opt_table_outline()
+```

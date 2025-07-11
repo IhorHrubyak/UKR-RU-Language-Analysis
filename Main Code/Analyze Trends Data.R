@@ -12,8 +12,8 @@ date <- "2010-01-01 2025-05-01"
 # trends_dat(where,"where","де","где","UA",date,date,region,city)
 # trends_dat(translate,"translate","переклад","перевод","UA",date,date,region,city)
 # trends_dat(money,"money","гроші","деньги","UA",date,date,region,city)
-# trends_dat(war,"war","війна","война","UA",date,date,region,city)
-
+trends_dat(war,"war","війна","война","UA",date,date,region,city)
+trends_dat(when,"When","коли","когда","UA",date,date,region,city)
 #Composite
 trends_dat(composite,"composite","що+новини+ігри+рецепти+Як+ціна+чому+гроші","что+Как+новости+игры+рецепты+цена+почему+деньги","UA",date,date,region,city)
 
@@ -31,11 +31,17 @@ what <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysi
 price <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Price: Ціна/Цена")
 games <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/games2010_01_01_2025_05_01.RDS"))[[1]]), "Games: Ігри/Игри")
 recipes <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Recipes: Рецепти/Рецепты")
+money <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/money2010_01_01_2025_05_01.RDS"))[[1]]), "Money: гроші/деньги")
+when <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/when2010_01_01_2025_05_01.RDS"))[[1]]), "When: Коли/Когда")
 composite <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite2010_01_01_2025_05_01.RDS"))[[1]]), "Composite")
 
 #Plot over date
 grid.arrange(how,News,what,price,games,recipes, nrow = 2,
              top="Graphs of Ukrainian/Russian Ratios over date")
+
+grid.arrange(how,News,what,price,games,recipes, nrow = 2,
+             top="Graphs of Ukrainian/Russian Ratios over date")
+
 
 #Ideas have graph over time and map by oblast of ratio. Some sort of time series analysis to test if there are breaks in data. For regional analysis over time, could manually download
 how_region <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS")[[3]]
