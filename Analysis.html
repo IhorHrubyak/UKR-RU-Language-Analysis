@@ -65,12 +65,6 @@ ul.task-list li input[type="checkbox"] {
     
   </div>
   
-<div>
-  <div class="abstract">
-    <div class="block-title">Abstract</div>
-    This project examines changes in the relative usage of Ukrainian vs.&nbsp;Russian language in Ukraine using Google Trends and regional data. It explores national and oblast-level trends, with historical context for key events such as the Euromaidan Revolution and the 2022 invasion.
-  </div>
-</div>
 
 
 </header>
@@ -100,12 +94,13 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>User behavior bias</strong>: Search language reflects usage, not identity or fluency.</p></li>
 <li><p><strong>Content availability bias</strong>: Historically, more content was available in Russian. This may <strong>overstate Russian usage</strong>, especially in earlier years or content-heavy queries.</p></li>
 <li><p><strong>Digital divide</strong>: Results reflect internet users, possibly underrepresenting rural or older populations.</p></li>
+<li><p><strong>Query Cap:</strong> Google caps how many queries can be made to it’s API in a seemingly opaque way so getting more searches is not straightforward.</p></li>
 </ul>
+<p>This is also limited additional analysis that looks at monthly page view for Ukainian and Russian language wikipedia in Ukraine since 2015 when the data was first avaliable. This data had to be manually downloaded from…</p>
 </section>
 <section id="iii-national-level-trends" class="level2">
 <h2 class="anchored" data-anchor-id="iii-national-level-trends"><strong>III National Level Trends</strong></h2>
-<p>Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there seems to be clear upward trend that seems to spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it’s still not even above 1.</p>
-<p><strong>Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap</strong></p>
+<p>Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there is a clear upward trend over the whole period that seems to especially spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it’s still not even above 1. This reflects potential bias as individuals that might have a preference for one language still some search in the other language.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -136,6 +131,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>Below tests a broader swath of terms. Some of these are potientally more politicized v others etc….</p>
+<p><strong>Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap</strong></p>
 <p>Below displays a composite index of search terms that includes the terms: what, news, games, recipes, how, price, why and money that are all spelled differently in the two languages showing a bit of a smoother trend with a sharp increase seeming to begin around the full scale invasion.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -147,29 +144,31 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>EXPAND ON BELOW MORE</p>
-<p>The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R’s breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints afterMay 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.</p>
+<p>The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R’s breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints after May 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.</p>
+<p>COULD FURHTER TEST DECREASE AROUND COVID?</p>
 </section>
 <section id="iv-regional-trends" class="level2">
 <h2 class="anchored" data-anchor-id="iv-regional-trends"><strong>IV Regional Trends</strong></h2>
+<p>Below has the ranking of the ratios over the full period of the search for each Oblast in a table form and a map of the ratios which depict the general know divide of a more Ukrainian speaking west with a more Russian speaking east/south. If the divides are taken literally, most regions with the exception of the west are still much more likely to search in Russian. From more than 2 times as likely in Kyiv to more than 5 times as likely in Odessa and Kharkiv Oblasts.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="ctftvirowp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ctftvirowp table {
+<div id="xyprxlnhjx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xyprxlnhjx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ctftvirowp thead, #ctftvirowp tbody, #ctftvirowp tfoot, #ctftvirowp tr, #ctftvirowp td, #ctftvirowp th {
+#xyprxlnhjx thead, #xyprxlnhjx tbody, #xyprxlnhjx tfoot, #xyprxlnhjx tr, #xyprxlnhjx td, #xyprxlnhjx th {
   border-style: none;
 }
 
-#ctftvirowp p {
+#xyprxlnhjx p {
   margin: 0;
   padding: 0;
 }
 
-#ctftvirowp .gt_table {
+#xyprxlnhjx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -195,12 +194,12 @@ ul.task-list li input[type="checkbox"] {
   border-left-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_caption {
+#xyprxlnhjx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ctftvirowp .gt_title {
+#xyprxlnhjx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -212,7 +211,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-width: 0;
 }
 
-#ctftvirowp .gt_subtitle {
+#xyprxlnhjx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -224,7 +223,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-width: 0;
 }
 
-#ctftvirowp .gt_heading {
+#xyprxlnhjx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -236,13 +235,13 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_bottom_border {
+#xyprxlnhjx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_col_headings {
+#xyprxlnhjx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -257,7 +256,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_col_heading {
+#xyprxlnhjx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -277,7 +276,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#ctftvirowp .gt_column_spanner_outer {
+#xyprxlnhjx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -289,15 +288,15 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 4px;
 }
 
-#ctftvirowp .gt_column_spanner_outer:first-child {
+#xyprxlnhjx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ctftvirowp .gt_column_spanner_outer:last-child {
+#xyprxlnhjx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ctftvirowp .gt_column_spanner {
+#xyprxlnhjx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -309,11 +308,11 @@ ul.task-list li input[type="checkbox"] {
   width: 100%;
 }
 
-#ctftvirowp .gt_spanner_row {
+#xyprxlnhjx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ctftvirowp .gt_group_heading {
+#xyprxlnhjx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -339,7 +338,7 @@ ul.task-list li input[type="checkbox"] {
   text-align: left;
 }
 
-#ctftvirowp .gt_empty_group_heading {
+#xyprxlnhjx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -354,15 +353,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 
-#ctftvirowp .gt_from_md > :first-child {
+#xyprxlnhjx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ctftvirowp .gt_from_md > :last-child {
+#xyprxlnhjx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ctftvirowp .gt_row {
+#xyprxlnhjx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -381,7 +380,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#ctftvirowp .gt_stub {
+#xyprxlnhjx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -394,7 +393,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ctftvirowp .gt_stub_row_group {
+#xyprxlnhjx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -408,15 +407,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: top;
 }
 
-#ctftvirowp .gt_row_group_first td {
+#xyprxlnhjx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ctftvirowp .gt_row_group_first th {
+#xyprxlnhjx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ctftvirowp .gt_summary_row {
+#xyprxlnhjx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -426,16 +425,16 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ctftvirowp .gt_first_summary_row {
+#xyprxlnhjx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_first_summary_row.thick {
+#xyprxlnhjx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ctftvirowp .gt_last_summary_row {
+#xyprxlnhjx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -445,7 +444,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_grand_summary_row {
+#xyprxlnhjx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -455,7 +454,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ctftvirowp .gt_first_grand_summary_row {
+#xyprxlnhjx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -465,7 +464,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_last_grand_summary_row_top {
+#xyprxlnhjx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -475,11 +474,11 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_striped {
+#xyprxlnhjx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ctftvirowp .gt_table_body {
+#xyprxlnhjx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -488,7 +487,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_footnotes {
+#xyprxlnhjx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -502,7 +501,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_footnote {
+#xyprxlnhjx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -511,7 +510,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ctftvirowp .gt_sourcenotes {
+#xyprxlnhjx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -525,7 +524,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ctftvirowp .gt_sourcenote {
+#xyprxlnhjx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -533,72 +532,72 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ctftvirowp .gt_left {
+#xyprxlnhjx .gt_left {
   text-align: left;
 }
 
-#ctftvirowp .gt_center {
+#xyprxlnhjx .gt_center {
   text-align: center;
 }
 
-#ctftvirowp .gt_right {
+#xyprxlnhjx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ctftvirowp .gt_font_normal {
+#xyprxlnhjx .gt_font_normal {
   font-weight: normal;
 }
 
-#ctftvirowp .gt_font_bold {
+#xyprxlnhjx .gt_font_bold {
   font-weight: bold;
 }
 
-#ctftvirowp .gt_font_italic {
+#xyprxlnhjx .gt_font_italic {
   font-style: italic;
 }
 
-#ctftvirowp .gt_super {
+#xyprxlnhjx .gt_super {
   font-size: 65%;
 }
 
-#ctftvirowp .gt_footnote_marks {
+#xyprxlnhjx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ctftvirowp .gt_asterisk {
+#xyprxlnhjx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ctftvirowp .gt_indent_1 {
+#xyprxlnhjx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ctftvirowp .gt_indent_2 {
+#xyprxlnhjx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ctftvirowp .gt_indent_3 {
+#xyprxlnhjx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ctftvirowp .gt_indent_4 {
+#xyprxlnhjx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ctftvirowp .gt_indent_5 {
+#xyprxlnhjx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ctftvirowp .katex-display {
+#xyprxlnhjx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ctftvirowp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#xyprxlnhjx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -792,6 +791,66 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>And visual map of the same data</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Maps/ua_ratio_map2.png" class="img-fluid figure-img" width="1800"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Belows looks at the composite over time which shows that across essentially every region there has been a clear upward trend following the same trajectory as the national trend with a few excetpions. The clearest exceptions being Luhansk, Sevastopol and Crimea. The later two have been Russian controlled since 2014 and have had very low Ukrainian search rates over time with a decline in Ukrainian likely occuring after Russian occupation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Figures/p1.png" class="img-fluid figure-img" width="2250"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Figures/p2.png" class="img-fluid figure-img" width="2250"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Figures/p3.png" class="img-fluid figure-img" width="2250"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Almost all regions had a growth in the ratio. The graph below indicates which regions grew the most looking a the log ratio changes from the first 12 months of the data relative to the last 12 months. Regions that had the highest growth tended to be in generally central Ukraine like Khmel’nyts’ka, Poltavs’ka and Poltavs’ka oblast. While regions that already had high Ukrainian ratio, like Ternopil, Lviv or Ivano-Frankisk, or high Russian ratios(excluding regions occupied prior to 2022), such as Kharkiv, Odesa and Zaporiz’ka had lower growth. This is seen in looking</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Figures/regions_bar.png" class="img-fluid figure-img" width="1800"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Figures/regions_rank.png" class="img-fluid figure-img" width="1800"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="v-wikipedia-data" class="level2">
+<h2 class="anchored" data-anchor-id="v-wikipedia-data"><strong>V Wikipedia Data</strong></h2>
+</section>
+<section id="vi-misc" class="level2">
+<h2 class="anchored" data-anchor-id="vi-misc"><strong>VI Misc</strong></h2>
+<p>Additional HTML version of map. Doesn’t seem to render in rpubs. COuld also include other interactive features like growth over time?</p>
+<iframe src="Maps/ua_ratio_map.html" width="100%" height="600px" frameborder="0">
+</iframe>
 </section>
 
 </main>

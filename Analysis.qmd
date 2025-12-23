@@ -3,7 +3,6 @@ title: "Ukrainian vs Russian Language Use in Ukraine"
 author: "John Ihor Campagna"
 format: html
 editor: visual
-abstract: This project examines changes in the relative usage of Ukrainian vs. Russian language in Ukraine using Google Trends and regional data. It explores national and oblast-level trends, with historical context for key events such as the Euromaidan Revolution and the 2022 invasion.
 ---
 
 ## I Introduction
@@ -42,6 +41,10 @@ Data was collected:
 
 -   **Digital divide**: Results reflect internet users, possibly underrepresenting rural or older populations.
 
+-   **Query Cap:** Google caps how many queries can be made to it's API in a seemingly opaque way so getting more searches is not straightforward.
+
+This is also limited additional analysis that looks at monthly page view for Ukainian and Russian language wikipedia in Ukraine since 2015 when the data was first avaliable. This data had to be manually downloaded from...
+
 ## **III National Level Trends**
 
 ```{r}
@@ -61,6 +64,9 @@ library(sf)
 library(dplyr)
 library(tmap)
 library(gt)
+library(knitr)
+library(stringr)
+library(purrr)
 
 source("Main Code/Trends Function.R")
 how <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS"))[[1]]), "How: Як/как")
@@ -75,9 +81,7 @@ composite <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-An
 
 ```
 
-Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there seems to be clear upward trend that seems to spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it's still not even above 1.
-
-**Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap**
+Below displays the national level ratio for basic search terms in Ukrainian v Russian from January 1, 2010 to May 1, 2025. A ratio above 1 means there were more searches in Ukrainian. Below 1 more searches in Russian. For each of the terms there is a clear upward trend over the whole period that seems to especially spike after the invasion. Depending on the exact search terms there is some instability in the ratio over time and overall ratio varying. For terms like What is the ratio is well over 1 in 2025 while for money it's still not even above 1. This reflects potential bias as individuals that might have a preference for one language still some search in the other language.
 
 ```{r echo=FALSE}
 when
@@ -87,6 +91,10 @@ money
 
 ```
 
+Below tests a broader swath of terms. Some of these are potientally more politicized v others etc....
+
+**Idea: Table for different ratios from huge composite of different terms? Should try a larger swath of terms in general if not limited by cap**
+
 Below displays a composite index of search terms that includes the terms: what, news, games, recipes, how, price, why and money that are all spelled differently in the two languages showing a bit of a smoother trend with a sharp increase seeming to begin around the full scale invasion.
 
 ```{r echo=FALSE}
@@ -95,11 +103,16 @@ composite
 
 EXPAND ON BELOW MORE
 
-The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R's breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints afterMay 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.
+The graphs indicate that there was a break around the time of the full scale Russian invasion. Using R's breakpoints function (GO INTO MORE) indicates that there are signifigant breakpoints after May 1 2020, when the ratio aburptly decreased, and after August 1 2022. The former was around covid and seemed to be a blimp while the later has been sustained.
+
+COULD FURHTER TEST DECREASE AROUND COVID?
 
 ## **IV Regional Trends**
 
+Below has the ranking of the ratios over the full period of the search for each Oblast in a table form and a map of the ratios which depict the general know divide of a more Ukrainian speaking west with a more Russian speaking east/south. If the divides are taken literally, most regions with the exception of the west are still much more likely to search in Russian. From more than 2 times as likely in Kyiv to more than 5 times as likely in Odessa and Kharkiv Oblasts.
+
 ```{r echo=FALSE}
+
 composite <- readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite2010_01_01_2025_05_01.RDS")[[3]]
 
 #Table Ranking By Region
@@ -144,4 +157,40 @@ regions_tab %>%
     `Ratio UA/RU` = "UA/RU Ratio"
   ) %>%
   opt_table_outline()
+```
+
+And visual map of the same data
+```{r echo=FALSE}
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/Maps/ua_ratio_map2.png")
+```
+
+
+
+Belows looks at the composite over time which shows that across essentially every region there has been a clear upward trend following the same trajectory as the national trend with a few excetpions. The clearest exceptions being Luhansk, Sevastopol and Crimea. The later two have been Russian controlled since 2014 and have had very low Ukrainian search rates over time with a decline in Ukrainian likely occuring after Russian occupation.
+
+```{r echo=FALSE}
+#Complete Regions
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/figures/p1.png")
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/figures/p2.png")
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/figures/p3.png")
+
+```
+Almost all regions had a growth in the ratio. The graph below indicates which regions grew the most looking a the log ratio changes from the first 12 months of the data relative to the last 12 months. Regions that had the highest growth tended to be in generally central Ukraine like Khmel'nyts'ka, Poltavs'ka and Poltavs'ka oblast. While regions that already had high Ukrainian ratio, like Ternopil, Lviv or Ivano-Frankisk, or high Russian ratios(excluding regions occupied prior to 2022), such as Kharkiv, Odesa and Zaporiz'ka had lower growth. This is seen in looking 
+```{r echo=FALSE}
+#Complete Regions
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/figures/regions_bar.png")
+knitr::include_graphics("C:/UKR-RU-Language-Analysis/figures/regions_rank.png")
+```
+
+
+## **V Wikipedia Data**
+
+
+## **VI Misc**
+Additional HTML version of map. Doesn't seem to render in rpubs. COuld also include other interactive features like growth over time?
+
+```{r echo=FALSE}
+#| echo: false
+#| output: asis
+cat('<iframe src="Maps/ua_ratio_map.html" width="100%" height="600px" frameborder="0"></iframe>')
 ```

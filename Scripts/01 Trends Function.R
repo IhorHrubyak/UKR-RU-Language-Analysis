@@ -38,7 +38,7 @@ trends_dat <- function(data,name, s1, s2, loc = "UA",  date,
   
   time_label <- gsub("[^0-9a-zA-Z]+", "_",time)
   file_name <- paste0(name, time_label, ".RDS")
-  saveRDS(dat, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries",file_name))
+  saveRDS(dat, file = file.path("C:/UKR-RU-Language-Analysis/Data/Raw",file_name))
   }
 
 # saveRDS(dat, "C:/Language Analysis/why2010-01-01 2025-05-01")
@@ -196,7 +196,7 @@ trends_by_regions <- function(keywords_ukrainian, keywords_russian,
       # Save individual region result
       time_label <- gsub("[^0-9a-zA-Z]+", "_", date)
       file_name <- paste0("trends_", geo_codes[i], "_", time_label, ".RDS")
-      saveRDS(region_data, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries/Region", file_name))
+      saveRDS(region_data, file = file.path("C:/UKR-RU-Language-Analysis/Data/Raw/Region", file_name))
       
       # Add a small delay between regions to avoid hitting rate limits
       if (i < length(geo_codes)) Sys.sleep(5)
@@ -204,7 +204,7 @@ trends_by_regions <- function(keywords_ukrainian, keywords_russian,
   }
   
 # Save complete results
-saveRDS(results, file = file.path("C:/UKR-RU-Language-Analysis/Trend Queries/Region", 
+saveRDS(results, file = file.path("C:/UKR-RU-Language-Analysis/Data/Raw/Region", 
                                     paste0("trends_all_regions_", gsub("[^0-9a-zA-Z]+", "_", date), ".RDS")))
   
   return(results)

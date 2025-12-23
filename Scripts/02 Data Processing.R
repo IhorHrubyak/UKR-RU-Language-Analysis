@@ -1,21 +1,26 @@
 #Run queries to get data, could maybe have loop of terms 
 #date for queries if not run 
-date <- "2010-01-01 2025-05-01"
-# trends_dat(what,"what","що таке","что такое","UA",date,what_t,what_r,what_c)
-# trends_dat(how,"how","Як","Как","UA",date,what_t,what_r,what_c)
-# trends_dat(news,"news","новини","новости","UA",date,date,region,city)
-# trends_dat(games,"games","ігри","игры","UA",date,date,region,city)
-# trends_dat(recipes,"recipes","рецепти","рецепты","UA",date,date,region,city)
-# trends_dat(price,"price","ціна","цена","UA",date,date,region,city)
-# trends_dat(why,"price","чому","почему","UA",date,date,region,city)
-# trends_dat(where,"price","чому","почему","UA",date,date,region,city)
-# trends_dat(where,"where","де","где","UA",date,date,region,city)
-# trends_dat(translate,"translate","переклад","перевод","UA",date,date,region,city)
-# trends_dat(money,"money","гроші","деньги","UA",date,date,region,city)
+date <- "2010-01-01 2025-11-01"
+
+trends_dat(news,"news","новини","новости","UA",date,date,region,city)
+trends_dat(price,"price","ціна","цена","UA",date,date,region,city)
+
+trends_dat(games,"games","ігри","игры","UA",date,date,region,city)
+trends_dat(recipes,"recipes","рецепти","рецепты","UA",date,date,region,city)
+
+trends_dat(why,"price","чому","почему","UA",date,date,region,city)
+trends_dat(where,"price","чому","почему","UA",date,date,region,city)
+trends_dat(where,"where","де","где","UA",date,date,region,city)
+trends_dat(translate,"translate","переклад","перевод","UA",date,date,region,city)
+trends_dat(money,"money","гроші","деньги","UA",date,date,region,city)
 trends_dat(war,"war","війна","война","UA",date,date,region,city)
 trends_dat(when,"When","коли","когда","UA",date,date,region,city)
+
+
+
 #Composite
 trends_dat(composite,"composite","що+новини+ігри+рецепти+Як+ціна+чому+гроші","что+Как+новости+игры+рецепты+цена+почему+деньги","UA",date,date,region,city)
+trends_dat(composite2,"composite2","як+що+хто+коли+чому+де+як зробити+як готувати+гроші+новини+ціна+рецепти+діти+стосунки","как+что+кто+когда+почему+где+как сделать+как готовить+деньги+новости+цена+рецепты+дети+отношения","UA",date,date,region,city)
 
 #By Region
 trends_by_regions(
@@ -23,10 +28,14 @@ trends_by_regions(
   keywords_russian = "что+Как+новости+игры+рецепты+цена+почему+деньги",date
 )
 
+News <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/news2010_01_01_2025_11_01.rds"))[[1]]), "News: новини/новости")
+#has a weird cycial element. Sudden decline in some periods?
+composite <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/Composite2010_01_01_2025_11_01.rds"))[[1]]), "News: новини/новости")
+time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/Price2010_01_01_2025_11_01.rds"))[[1]]), "News: новини/новости")
 
 #If data saved and want to load
 how <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/how2010_01_01_2025_05_01.RDS"))[[1]]), "How: Як/как")
-News <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/news2010_01_01_2025_05_01.rds"))[[1]]), "News: новини/новости")
+
 what <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/what2010_01_01_2025_05_01.rds"))[[1]]), "What is: Що таке/Что такое")
 price <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/recipes2010_01_01_2025_05_01.RDS"))[[1]]), "Price: Ціна/Цена")
 games <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/games2010_01_01_2025_05_01.RDS"))[[1]]), "Games: Ігри/Игри")
@@ -34,6 +43,7 @@ recipes <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Anal
 money <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/money2010_01_01_2025_05_01.RDS"))[[1]]), "Money: гроші/деньги")
 when <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/when2010_01_01_2025_05_01.RDS"))[[1]]), "When: Коли/Когда")
 composite <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite2010_01_01_2025_05_01.RDS"))[[1]]), "Composite")
+composite2 <-  time_plot(wide_dat(process_g_trends(readRDS("C:/UKR-RU-Language-Analysis/Trend Queries/composite22010_01_01_2025_05_01.RDS"))[[1]]), "Composite")
 
 #Plot over date
 grid.arrange(how,News,what,price,games,recipes, nrow = 2,

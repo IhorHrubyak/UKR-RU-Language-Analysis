@@ -287,4 +287,5 @@ tm_shape(map_data) +
               popup.vars = c("Oblast" = "NAME_1", "Ratio" = "rat")) +
   tm_layout(title = "Interactive Ukrainian-to-Russian Search Ratio Map")
 ```
+
 The `echo: false` option disables the printing of code (only output is displayed).
