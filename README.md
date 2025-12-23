@@ -24,17 +24,6 @@ This project analyzes the temporal and geographic distribution of Ukrainian vs R
 - Google Trends uses relative (0-100) rather than absolute measures
 - Occupied territories (Crimea, parts of Donbas) have incomplete/biased data after 2014
 
-## Repository Structure
-
-```
-├── Analysis.qmd              # Main analysis document (Quarto)
-├── Analysis.html             # Rendered report
-├── Main Code/                # R scripts for data collection & analysis
-├── Maps/                     # Generated geographic visualizations
-├── Figures/                  # Time series plots and charts
-├── Shapefiles/               # Ukrainian administrative boundaries
-└── Wikimedia/                # Wikipedia pageview data (planned addition)
-```
 
 ## Planned Additions
 
